@@ -68,23 +68,6 @@ class UserController {
       return response.status(401).json({ message: 'Error at User Authentication' });
     }
   }
-
-  // Exemplo de requisição
-  async findAll(request, response) {
-    try {
-      const users = await User.findAll({
-        include: [{
-          model: Address,
-          as: 'addresses',
-        }],
-      });
-
-      return response.status(200).json(users);
-    } catch (error) {
-      console.log(error);
-      return response.status(401).json({ message: error });
-    }
-  }
 }
 
 module.exports = new UserController();

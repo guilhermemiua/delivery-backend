@@ -1,4 +1,4 @@
-const { Company, Address } = require('../models');
+const { Company, CompanyCategory } = require('../models');
 
 class CompanyController {
   async register(request, response) {
@@ -20,6 +20,7 @@ class CompanyController {
         zipcode,
         latitude,
         longitude,
+        company_category_id,
       } = request.body;
 
       const company = await Company.create({
@@ -39,9 +40,10 @@ class CompanyController {
         zipcode,
         latitude,
         longitude,
+        company_category_id,
       });
 
-      return response.status(201).json({ company });
+      return response.status(201).json(company);
     } catch (error) {
       return response.status(401).json({ message: 'Error at Company Register' });
     }
@@ -77,11 +79,26 @@ class CompanyController {
 
       if (offset && limit) {
         companies = await Company.findAndCountAll({
+          where: {
+            is_admin: 0,
+          },
           offset: Number(offset),
           limit: Number(limit),
+          include: [{
+            model: CompanyCategory,
+            as: 'company_category',
+          }],
         });
       } else {
-        companies = await Company.findAll({});
+        companies = await Company.findAll({
+          where: {
+            is_admin: 0,
+          },
+          include: [{
+            model: CompanyCategory,
+            as: 'company_category',
+          }],
+        });
       }
 
       return response.status(200).json(companies);
@@ -94,7 +111,12 @@ class CompanyController {
     try {
       const { id } = request.params;
 
-      const company = await Company.findById(Number(id));
+      const company = await Company.findByPk(Number(id), {
+        include: [{
+          model: CompanyCategory,
+          as: 'company_category',
+        }],
+      });
 
       if (!company) {
         return response.status(401).json({ message: 'Company not found' });

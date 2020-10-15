@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
+    company_category_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     trading_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -78,6 +82,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0,
     },
+    is_admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: 0,
+    },
     created_at: {
       type: DataTypes.DATE,
     },
@@ -100,6 +109,14 @@ module.exports = (sequelize, DataTypes) => {
 
   Company.prototype.generateToken = function () {
     return jwt.sign({ id: this.id }, process.env.APP_SECRET);
+  };
+
+  Company.associate = (models) => {
+    Company.belongsTo(models.CompanyCategory, {
+      as: 'company_category',
+      foreignKey: 'company_category_id',
+      targetKey: 'id',
+    });
   };
 
   return Company;
