@@ -1,13 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
-  const CompanyCategory = sequelize.define('CompanyCategory', {
+  const Product = sequelize.define('Product', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false,
     },
+    company_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
     created_at: {
@@ -18,13 +26,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  CompanyCategory.associate = (models) => {
-    CompanyCategory.hasOne(models.Company, {
+  Product.associate = (models) => {
+    Product.belongsTo(models.Company, {
       as: 'company',
-      foreignKey: 'company_category_id',
+      foreignKey: 'company_id',
       targetKey: 'id',
     });
   };
 
-  return CompanyCategory;
+  return Product;
 };

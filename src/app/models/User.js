@@ -56,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Address, {
       as: 'addresses',
-      foreignKey: 'id',
-      targetKey: 'user_id',
+      foreignKey: 'user_id',
+      targetKey: 'id',
     });
   };
 

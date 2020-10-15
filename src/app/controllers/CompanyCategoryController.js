@@ -61,7 +61,7 @@ class CompanyCategoryController {
         return response.status(401).json({ message: 'Esta categoria já está sendo usada por uma Empresa.' });
       }
 
-      return response.status(401).json({ message: 'Error at Company Category Find All' });
+      return response.status(401).json({ message: 'Error at Company Category Delete' });
     }
   }
 }

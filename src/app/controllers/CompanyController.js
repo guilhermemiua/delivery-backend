@@ -1,4 +1,4 @@
-const { Company, CompanyCategory } = require('../models');
+const { Company, CompanyCategory, Product } = require('../models');
 
 class CompanyController {
   async register(request, response) {
@@ -84,20 +84,32 @@ class CompanyController {
           },
           offset: Number(offset),
           limit: Number(limit),
-          include: [{
-            model: CompanyCategory,
-            as: 'company_category',
-          }],
+          include: [
+            {
+              model: CompanyCategory,
+              as: 'company_category',
+            },
+            {
+              model: Product,
+              as: 'products',
+            },
+          ],
         });
       } else {
         companies = await Company.findAll({
           where: {
             is_admin: 0,
           },
-          include: [{
-            model: CompanyCategory,
-            as: 'company_category',
-          }],
+          include: [
+            {
+              model: CompanyCategory,
+              as: 'company_category',
+            },
+            {
+              model: Product,
+              as: 'products',
+            },
+          ],
         });
       }
 
@@ -112,10 +124,16 @@ class CompanyController {
       const { id } = request.params;
 
       const company = await Company.findByPk(Number(id), {
-        include: [{
-          model: CompanyCategory,
-          as: 'company_category',
-        }],
+        include: [
+          {
+            model: CompanyCategory,
+            as: 'company_category',
+          },
+          {
+            model: Product,
+            as: 'products',
+          },
+        ],
       });
 
       if (!company) {
