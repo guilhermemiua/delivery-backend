@@ -24,6 +24,7 @@
         "class-methods-use-this": "off",
         "no-param-reassign": "off",
         "arrow-body-style": "off",
-        "func-names": "off"
+        "func-names": "off",
+        "camelcase": "off"
     }
 }

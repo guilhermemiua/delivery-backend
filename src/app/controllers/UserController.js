@@ -1,48 +1,88 @@
-const { User } = require('../models');
+const { User, Address } = require('../models');
 
 class UserController {
-  async register(req, res) {
+  async register(request, response) {
     try {
-      const { email, password } = req.body;
-
-      if (!email) {
-        return res.status(401).json({ message: 'E-mail not provided' });
-      }
-
-      if (!password) {
-        return res.status(401).json({ message: 'Password not provided' });
-      }
+      const {
+        email,
+        password,
+        cpf,
+        phone_ddd,
+        phone_number,
+        street,
+        number,
+        district,
+        city,
+        state,
+        complement,
+        zipcode,
+        latitude,
+        longitude,
+      } = request.body;
 
       const user = await User.create({
         email,
         password,
+        cpf,
+        phone_ddd,
+        phone_number,
       });
 
-      return res.status(201).json({ user });
+      const address = await Address.create({
+        user_id: user.id,
+        street,
+        number,
+        district,
+        city,
+        state,
+        complement,
+        zipcode,
+        latitude,
+        longitude,
+      });
+
+      return response.status(201).json({ user, address });
     } catch (error) {
-      return res.status(401).json({ message: error });
+      return response.status(401).json({ message: 'Error at User Register' });
     }
   }
 
-  async authenticate(req, res) {
+  async authenticate(request, response) {
     try {
-      const { email, password } = req.body;
+      const { email, password } = request.body;
 
       const user = await User.findOne({ where: { email } });
 
       // User not found
       if (!user) {
-        return res.status(401).json({ message: 'User not found' });
+        return response.status(401).json({ message: 'User not found' });
       }
 
       // Incorrect password
       if (!(await user.checkPassword(password))) {
-        return res.status(401).json({ message: 'Incorrect password' });
+        return response.status(401).json({ message: 'Incorrect password' });
       }
 
-      return res.status(200).json({ user, token: user.generateToken() });
+      return response.status(200).json({ user, token: user.generateToken() });
     } catch (error) {
-      return res.status(401).json({ message: error });
+      return response.status(401).json({ message: 'Error at User Authentication' });
+    }
+  }
+
+  // Exemplo de requisição
+  async findAll(request, response) {
+    try {
+      const users = await User.findAll({
+        include: [{
+          model: Address,
+          as: 'addresses',
+        }],
+      });
+
+      return response.status(200).json(users);
+    } catch (error) {
+      console.log(error);
+      return response.status(401).json({ message: error });
     }
   }
 }

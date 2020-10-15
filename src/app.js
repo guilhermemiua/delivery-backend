@@ -1,8 +1,4 @@
-require('dotenv').config({
-  path: process.env.NODE_ENV === 'test'
-    ? '.env.test'
-    : '.env',
-});
+require('dotenv').config();
 
 const express = require('express');
 const routes = require('./routes');
@@ -16,6 +12,7 @@ class AppController {
 
   middlewares() {
     this.express.use(express.json());
+    this.express.use(express.urlencoded({ extended: false }));
   }
 
   routes() {
