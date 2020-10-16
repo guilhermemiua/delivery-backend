@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false,
     },
+    profile_image_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -57,6 +61,11 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Address, {
       as: 'addresses',
       foreignKey: 'user_id',
+      targetKey: 'id',
+    });
+    User.hasOne(models.ProfileImage, {
+      as: 'profile_image',
+      foreignKey: 'profile_image_id',
       targetKey: 'id',
     });
   };

@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    profile_image_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     trading_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -87,19 +91,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0,
     },
+    has_delivery: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    delivery_price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
     created_at: {
       type: DataTypes.DATE,
     },
     updated_at: {
       type: DataTypes.DATE,
-    },
-  }, {
-    hooks: {
-      beforeSave: async (company) => {
-        if (company.password) {
-          company.password = await bcrypt.hash(company.password, 8);
-        }
-      },
     },
   });
 
@@ -120,6 +124,11 @@ module.exports = (sequelize, DataTypes) => {
     Company.hasMany(models.Product, {
       as: 'products',
       foreignKey: 'company_id',
+      targetKey: 'id',
+    });
+    Company.hasOne(models.ProfileImage, {
+      as: 'profile_image',
+      foreignKey: 'profile_image_id',
       targetKey: 'id',
     });
   };
