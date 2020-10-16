@@ -58,7 +58,7 @@ class CompanyCategoryController {
       });
     } catch (error) {
       if (error.message.indexOf('companies_company_category_id_foreign')) {
-        return response.status(401).json({ message: 'Esta categoria já está sendo usada por uma Empresa.' });
+        return response.status(401).json({ message: 'Esta categoria já está sendo usada por uma Empresa' });
       }
 
       return response.status(401).json({ message: 'Error at Company Category Delete' });

@@ -83,6 +83,14 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
       },
+      has_delivery: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      delivery_price: {
+        type: Sequelize.DECIMAL(10, 2),
+        allowNull: true,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,

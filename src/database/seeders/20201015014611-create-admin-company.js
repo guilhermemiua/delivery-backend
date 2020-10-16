@@ -20,6 +20,7 @@ module.exports = {
       latitude: '1',
       longitude: '1',
       is_admin: true,
+      has_delivery: false,
       created_at: new Date(),
       updated_at: new Date(),
     }], {});

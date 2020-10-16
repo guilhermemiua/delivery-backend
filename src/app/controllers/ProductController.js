@@ -1,4 +1,4 @@
-const { Product, Company } = require('../models');
+const { Product } = require('../models');
 
 class ProductController {
   async create(request, response) {
@@ -7,12 +7,14 @@ class ProductController {
         name,
         price,
         company_id,
+        product_category_id,
       } = request.body;
 
       const product = await Product.create({
         name,
         price,
         company_id,
+        product_category_id,
       });
 
       return response.status(201).json(product);
@@ -27,11 +29,13 @@ class ProductController {
       const {
         name,
         price,
+        product_category_id,
       } = request.body;
 
       const product = await Product.update({
         name,
         price,
+        product_category_id,
       }, {
         where: {
           id: Number(id),

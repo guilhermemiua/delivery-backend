@@ -1,7 +1,8 @@
 const { User, Address } = require('../models');
+const { encryptPassword } = require('../helpers');
 
 class UserController {
-  async register(request, response) {
+  async create(request, response) {
     try {
       const {
         email,
@@ -20,12 +21,14 @@ class UserController {
         longitude,
       } = request.body;
 
+      const passwordHashed = await encryptPassword(password);
+
       const user = await User.create({
         email,
-        password,
         cpf,
         phone_ddd,
         phone_number,
+        password: passwordHashed,
       });
 
       const address = await Address.create({
@@ -44,6 +47,38 @@ class UserController {
       return response.status(201).json({ user, address });
     } catch (error) {
       return response.status(401).json({ message: 'Error at User Register' });
+    }
+  }
+
+  async update(request, response) {
+    try {
+      const { id } = request.params;
+      const {
+        email,
+        cpf,
+        phone_ddd,
+        phone_number,
+        password,
+      } = request.body;
+
+      const passwordHashed = await encryptPassword(password);
+
+      const user = await User.update({
+        email,
+        cpf,
+        phone_ddd,
+        phone_number,
+        password: passwordHashed,
+      }, {
+        where: {
+          id: Number(id),
+        },
+      });
+
+      return response.status(201).json(user);
+    } catch (error) {
+      console.log(error);
+      return response.status(401).json({ message: 'Error at User Update' });
     }
   }
 

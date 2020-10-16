@@ -1,8 +1,65 @@
 const { Company, CompanyCategory, Product } = require('../models');
+const { encryptPassword } = require('../helpers');
 
 class CompanyController {
-  async register(request, response) {
+  async create(request, response) {
     try {
+      const {
+        trading_name,
+        company_name,
+        email,
+        cnpj,
+        phone_ddd,
+        phone_number,
+        street,
+        number,
+        district,
+        city,
+        state,
+        complement,
+        zipcode,
+        latitude,
+        longitude,
+        delivery_price,
+        has_delivery,
+        company_category_id,
+        password,
+      } = request.body;
+
+      const passwordHashed = await encryptPassword(password);
+
+      const company = await Company.create({
+        trading_name,
+        company_name,
+        email,
+        cnpj,
+        phone_ddd,
+        phone_number,
+        street,
+        number,
+        district,
+        city,
+        state,
+        complement,
+        zipcode,
+        latitude,
+        longitude,
+        delivery_price,
+        has_delivery,
+        company_category_id,
+        password: passwordHashed,
+      });
+
+      return response.status(201).json(company);
+    } catch (error) {
+      console.log(error);
+      return response.status(401).json({ message: 'Error at Company Register' });
+    }
+  }
+
+  async update(request, response) {
+    try {
+      const { id } = request.params;
       const {
         trading_name,
         company_name,
@@ -20,14 +77,17 @@ class CompanyController {
         zipcode,
         latitude,
         longitude,
+        delivery_price,
+        has_delivery,
         company_category_id,
       } = request.body;
 
-      const company = await Company.create({
+      const passwordHashed = await encryptPassword(password);
+
+      const company = await Company.update({
         trading_name,
         company_name,
         email,
-        password,
         cnpj,
         phone_ddd,
         phone_number,
@@ -40,12 +100,20 @@ class CompanyController {
         zipcode,
         latitude,
         longitude,
+        delivery_price,
+        has_delivery,
         company_category_id,
+        password: passwordHashed,
+      }, {
+        where: {
+          id: Number(id),
+        },
       });
 
       return response.status(201).json(company);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Register' });
+      console.log(error);
+      return response.status(401).json({ message: 'Error at Company Update' });
     }
   }
 
