@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Company = sequelize.define('Order', {
+  const Order = sequelize.define('Order', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     payment_type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('credit_card', 'money'),
       allowNull: false,
     },
     is_delivery: {
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     status: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('waiting', 'confirmed', 'cancelled'),
       allowNull: false,
     },
     created_at: {
@@ -46,23 +46,26 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Company.associate = (models) => {
-    // Company.belongsTo(models.User, {
-    //   as: 'user',
-    //   foreignKey: 'user_id',
-    //   targetKey: 'id',
-    // });
-    // Company.belongsTo(models.Company, {
-    //   as: 'company',
-    //   foreignKey: 'company_id',
-    //   targetKey: 'id',
-    // });
-    Company.hasOne(models.OrderReview, {
+  Order.associate = (models) => {
+    Order.belongsTo(models.User, {
+      as: 'user',
+      foreignKey: 'user_id',
+      targetKey: 'id',
+    });
+    Order.belongsTo(models.Company, {
+      as: 'company',
+      foreignKey: 'company_id',
+      targetKey: 'id',
+    });
+    Order.hasOne(models.OrderReview, {
       as: 'order_review',
       foreignKey: 'order_review_id',
       targetKey: 'id',
     });
+    Order.belongsToMany(models.Product, {
+      through: models.OrderProduct,
+    });
   };
 
-  return Company;
+  return Order;
 };

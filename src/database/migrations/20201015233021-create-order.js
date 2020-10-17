@@ -24,7 +24,7 @@ module.exports = {
         },
       },
       payment_type: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM('credit_card', 'money'),
         allowNull: false,
       },
       total_price: {
@@ -36,7 +36,7 @@ module.exports = {
         allowNull: false,
       },
       status: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM('waiting', 'confirmed', 'cancelled'),
         allowNull: false,
       },
       is_delivery: {

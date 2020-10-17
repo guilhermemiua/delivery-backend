@@ -112,7 +112,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Company.prototype.generateToken = function () {
-    return jwt.sign({ id: this.id }, process.env.APP_SECRET);
+    return jwt.sign({ companyId: this.id }, process.env.APP_SECRET);
   };
 
   Company.associate = (models) => {
@@ -123,6 +123,11 @@ module.exports = (sequelize, DataTypes) => {
     });
     Company.hasMany(models.Product, {
       as: 'products',
+      foreignKey: 'company_id',
+      targetKey: 'id',
+    });
+    Company.hasMany(models.Order, {
+      as: 'orders',
       foreignKey: 'company_id',
       targetKey: 'id',
     });

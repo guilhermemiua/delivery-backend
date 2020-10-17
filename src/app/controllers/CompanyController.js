@@ -1,3 +1,7 @@
+const fs = require('fs');
+
+const { v4: uuidv4 } = require('uuid');
+
 const { Company, CompanyCategory, Product } = require('../models');
 const { encryptPassword } = require('../helpers');
 
@@ -24,6 +28,7 @@ class CompanyController {
         has_delivery,
         company_category_id,
         password,
+        profile_image,
       } = request.body;
 
       const passwordHashed = await encryptPassword(password);
@@ -49,6 +54,17 @@ class CompanyController {
         company_category_id,
         password: passwordHashed,
       });
+
+      if (profile_image) {
+        let refactorBase64 = profile_image.path.replace(/^data:image\/\w+;base64,/, '');
+        refactorBase64 = refactorBase64.replace(/^data:application\/\pdf+;base64,/, '');
+
+        const imageBuffer = Buffer.from(refactorBase64, 'base64');
+        const ext = profile_image.name.split('.').pop();
+        const fileName = `${uuidv4()}.${ext}`;
+
+        fs.writeFileSync(`./tmp/${fileName}`, imageBuffer, 'utf8');
+      }
 
       return response.status(201).json(company);
     } catch (error) {
@@ -123,19 +139,18 @@ class CompanyController {
 
       const company = await Company.findOne({ where: { email } });
 
-      // Company not found
       if (!company) {
-        return response.status(401).json({ message: 'Company not found' });
+        return response.status(401).json({ message: 'Senha ou Email incorreto' });
       }
 
-      // Incorrect password
       if (!(await company.checkPassword(password))) {
-        return response.status(401).json({ message: 'Incorrect password' });
+        return response.status(401).json({ message: 'Senha ou Email incorreto' });
       }
 
       return response.status(200).json({ company, token: company.generateToken() });
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Authentication' });
+      console.log(error);
+      return response.status(401).json({ message: 'Erro na autenticação da empresa' });
     }
   }
 

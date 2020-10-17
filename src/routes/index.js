@@ -8,11 +8,11 @@ const ProductCategoryController = require('../app/controllers/ProductCategoryCon
 
 const authMiddleware = require('../app/middlewares/auth');
 
-routes.post('/user', UserController.create);
-routes.post('/user/authenticate', UserController.authenticate);
+routes.post('/users', UserController.create);
+routes.post('/users/authenticate', UserController.authenticate);
 
-routes.post('/company', CompanyController.create);
-routes.post('/company/authenticate', CompanyController.authenticate);
+routes.post('/companies', CompanyController.create);
+routes.post('/companies/authenticate', CompanyController.authenticate);
 
 // Authenticated routes
 routes.use(authMiddleware);
@@ -21,7 +21,7 @@ routes.put('/user/:id', UserController.update);
 
 routes.get('/companies', CompanyController.findAll);
 routes.get('/companies/:id', CompanyController.findById);
-routes.put('/company/:id', CompanyController.update);
+routes.put('/companies/:id', CompanyController.update);
 
 routes.post('/company-categories', CompanyCategoryController.create);
 routes.get('/company-categories', CompanyCategoryController.findAll);
