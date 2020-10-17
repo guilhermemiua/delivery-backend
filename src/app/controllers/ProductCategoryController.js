@@ -13,7 +13,7 @@ class ProductCategoryController {
 
       return response.status(201).json(productCategory);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Category Create' });
+      return response.status(401).json({ message: 'Erro na criação da categoria' });
     }
   }
 
@@ -23,7 +23,7 @@ class ProductCategoryController {
 
       return response.status(200).json(productCategories);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Category Find All' });
+      return response.status(401).json({ message: 'Erro na busca das categorias' });
     }
   }
 
@@ -34,12 +34,12 @@ class ProductCategoryController {
       const productCategory = await ProductCategory.findByPk(Number(id));
 
       if (!productCategory) {
-        return response.status(401).json({ message: 'Product Category not found' });
+        return response.status(401).json({ message: 'Categoria não encontrada' });
       }
 
       return response.status(200).json(productCategory);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Category Find By Id' });
+      return response.status(401).json({ message: 'Erro na busca de categoria' });
     }
   }
 
@@ -61,7 +61,7 @@ class ProductCategoryController {
         return response.status(401).json({ message: 'Esta categoria já está sendo usada por um Produto' });
       }
 
-      return response.status(401).json({ message: 'Error at Product Category Delete' });
+      return response.status(401).json({ message: 'Erro na remoção da categoria' });
     }
   }
 }

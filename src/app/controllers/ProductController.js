@@ -3,23 +3,27 @@ const { Product } = require('../models');
 class ProductController {
   async create(request, response) {
     try {
+      const { companyId } = request;
       const {
         name,
         price,
-        company_id,
         product_category_id,
       } = request.body;
+
+      if (!companyId) {
+        return response.status(401).json({ message: 'Empresa não enviado' });
+      }
 
       const product = await Product.create({
         name,
         price,
-        company_id,
         product_category_id,
+        company_id: companyId,
       });
 
       return response.status(201).json(product);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Create' });
+      return response.status(401).json({ message: 'Erro na criação do produto' });
     }
   }
 
@@ -55,6 +59,26 @@ class ProductController {
       return response.status(200).json(products);
     } catch (error) {
       return response.status(401).json({ message: 'Error at Product Find All' });
+    }
+  }
+
+  async getProductsPerCompany(request, response) {
+    try {
+      const { companyId } = request;
+
+      if (!companyId) {
+        return response.status(401).json({ message: 'Empresa não enviado' });
+      }
+
+      const products = await Product.findAll({
+        where: {
+          company_id: companyId,
+        },
+      });
+
+      return response.status(200).json(products);
+    } catch (error) {
+      return response.status(401).json({ message: 'Erro na busca dos produtos' });
     }
   }
 

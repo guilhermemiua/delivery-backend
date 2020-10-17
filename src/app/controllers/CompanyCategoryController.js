@@ -13,7 +13,7 @@ class CompanyCategoryController {
 
       return response.status(201).json(companyCategory);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Category Create' });
+      return response.status(401).json({ message: 'Erro na criação da categoria' });
     }
   }
 
@@ -23,7 +23,7 @@ class CompanyCategoryController {
 
       return response.status(200).json(companyCategories);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Category Find All' });
+      return response.status(401).json({ message: 'Erro na busca das categorias' });
     }
   }
 
@@ -34,12 +34,12 @@ class CompanyCategoryController {
       const companyCategory = await CompanyCategory.findByPk(Number(id));
 
       if (!companyCategory) {
-        return response.status(401).json({ message: 'Company Category not found' });
+        return response.status(401).json({ message: 'Categoria não encontrada' });
       }
 
       return response.status(200).json(companyCategory);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Category Find By Id' });
+      return response.status(401).json({ message: 'Erro na busca de categoria' });
     }
   }
 
@@ -61,7 +61,7 @@ class CompanyCategoryController {
         return response.status(401).json({ message: 'Esta categoria já está sendo usada por uma Empresa' });
       }
 
-      return response.status(401).json({ message: 'Error at Company Category Delete' });
+      return response.status(401).json({ message: 'Erro na remoção da categoria' });
     }
   }
 }
