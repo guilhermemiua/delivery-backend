@@ -54,12 +54,17 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.prototype.generateToken = function () {
-    return jwt.sign({ id: this.id }, process.env.APP_SECRET);
+    return jwt.sign({ userId: this.id }, process.env.APP_SECRET);
   };
 
   User.associate = (models) => {
     User.hasMany(models.Address, {
       as: 'addresses',
+      foreignKey: 'user_id',
+      targetKey: 'id',
+    });
+    User.hasMany(models.Order, {
+      as: 'orders',
       foreignKey: 'user_id',
       targetKey: 'id',
     });
