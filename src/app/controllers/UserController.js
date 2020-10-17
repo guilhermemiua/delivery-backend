@@ -1,5 +1,5 @@
-const { User, Address } = require('../models');
-const { encryptPassword } = require('../helpers');
+const { User, Address } = require("../models");
+const { encryptPassword } = require("../helpers");
 
 class UserController {
   async create(request, response) {
@@ -46,39 +46,35 @@ class UserController {
 
       return response.status(201).json({ user, address });
     } catch (error) {
-      return response.status(401).json({ message: 'Error at User Register' });
+      return response.status(401).json({ message: "Error at User Register" });
     }
   }
 
   async update(request, response) {
     try {
       const { id } = request.params;
-      const {
-        email,
-        cpf,
-        phone_ddd,
-        phone_number,
-        password,
-      } = request.body;
+      const { email, cpf, phone_ddd, phone_number, password } = request.body;
 
       const passwordHashed = await encryptPassword(password);
 
-      const user = await User.update({
-        email,
-        cpf,
-        phone_ddd,
-        phone_number,
-        password: passwordHashed,
-      }, {
-        where: {
-          id: Number(id),
+      const user = await User.update(
+        {
+          email,
+          cpf,
+          phone_ddd,
+          phone_number,
+          password: passwordHashed,
         },
-      });
+        {
+          where: {
+            id: Number(id),
+          },
+        }
+      );
 
       return response.status(201).json(user);
     } catch (error) {
-      console.log(error);
-      return response.status(401).json({ message: 'Error at User Update' });
+      return response.status(401).json({ message: "Error at User Update" });
     }
   }
 
@@ -90,17 +86,19 @@ class UserController {
 
       // User not found
       if (!user) {
-        return response.status(401).json({ message: 'User not found' });
+        return response.status(401).json({ message: "User not found" });
       }
 
       // Incorrect password
       if (!(await user.checkPassword(password))) {
-        return response.status(401).json({ message: 'Incorrect password' });
+        return response.status(401).json({ message: "Incorrect password" });
       }
 
       return response.status(200).json({ user, token: user.generateToken() });
     } catch (error) {
-      return response.status(401).json({ message: 'Error at User Authentication' });
+      return response
+        .status(401)
+        .json({ message: "Error at User Authentication" });
     }
   }
 }
