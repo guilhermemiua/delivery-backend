@@ -30,6 +30,7 @@ routes.delete('/company-categories/:id', CompanyCategoryController.delete);
 
 routes.post('/products', ProductController.create);
 routes.get('/products', ProductController.findAll);
+routes.get('/products/me', ProductController.getProductsPerCompany);
 routes.get('/products/:id', ProductController.findById);
 routes.put('/products/:id', ProductController.update);
 routes.delete('/products/:id', ProductController.delete);
