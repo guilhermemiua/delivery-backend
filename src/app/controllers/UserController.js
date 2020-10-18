@@ -46,7 +46,6 @@ class UserController {
 
       return response.status(201).json({ user, address });
     } catch (error) {
-      console.log(error);
       return response.status(401).json({ message: 'Error at User Register' });
     }
   }
@@ -55,30 +54,28 @@ class UserController {
     try {
       const { id } = request.params;
       const {
-        email,
-        cpf,
-        phone_ddd,
-        phone_number,
-        password,
+        email, cpf, phone_ddd, phone_number, password,
       } = request.body;
 
       const passwordHashed = await encryptPassword(password);
 
-      const user = await User.update({
-        email,
-        cpf,
-        phone_ddd,
-        phone_number,
-        password: passwordHashed,
-      }, {
-        where: {
-          id: Number(id),
+      const user = await User.update(
+        {
+          email,
+          cpf,
+          phone_ddd,
+          phone_number,
+          password: passwordHashed,
         },
-      });
+        {
+          where: {
+            id: Number(id),
+          },
+        },
+      );
 
       return response.status(201).json(user);
     } catch (error) {
-      console.log(error);
       return response.status(401).json({ message: 'Error at User Update' });
     }
   }
