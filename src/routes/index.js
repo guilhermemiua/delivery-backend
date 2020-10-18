@@ -4,6 +4,7 @@ const UserController = require('../app/controllers/UserController');
 const CompanyController = require('../app/controllers/CompanyController');
 const CompanyCategoryController = require('../app/controllers/CompanyCategoryController');
 const ProductController = require('../app/controllers/ProductController');
+const OrderController = require('../app/controllers/OrderController');
 const ProductCategoryController = require('../app/controllers/ProductCategoryController');
 
 const authMiddleware = require('../app/middlewares/auth');
@@ -39,5 +40,11 @@ routes.post('/product-categories', ProductCategoryController.create);
 routes.get('/product-categories', ProductCategoryController.findAll);
 routes.get('/product-categories/:id', ProductCategoryController.findById);
 routes.delete('/product-categories/:id', ProductCategoryController.delete);
+
+routes.post('/orders', OrderController.create);
+routes.get('/orders', OrderController.findAll);
+routes.get('/orders/me', OrderController.getOrdersPerCompany);
+routes.get('/orders/:id', OrderController.findById);
+routes.put('/orders/:id', OrderController.update);
 
 module.exports = routes;

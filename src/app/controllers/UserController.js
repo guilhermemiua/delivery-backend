@@ -46,6 +46,7 @@ class UserController {
 
       return response.status(201).json({ user, address });
     } catch (error) {
+      console.log(error);
       return response.status(401).json({ message: 'Error at User Register' });
     }
   }
@@ -100,6 +101,7 @@ class UserController {
 
       return response.status(200).json({ user, token: user.generateToken() });
     } catch (error) {
+      console.log(error);
       return response.status(401).json({ message: 'Error at User Authentication' });
     }
   }
