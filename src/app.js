@@ -1,8 +1,8 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const express = require('express');
-const cors = require('cors');
-const routes = require('./routes');
+const express = require("express");
+const cors = require("cors");
+const routes = require("./routes");
 
 class AppController {
   constructor() {
@@ -12,6 +12,7 @@ class AppController {
   }
 
   middlewares() {
+    this.express.use(express.static("public"));
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: false }));
     this.express.use(cors());
