@@ -1,6 +1,6 @@
-# nodejs-tdd-boilerplate
+# Delivery App
 
-Boilerplate created for personal projects.
+Delivery App for university lecture
 
 # Libraries
 - Express
@@ -8,16 +8,8 @@ Boilerplate created for personal projects.
 - JSON Web Token
 - Sequelize
 - Dotenv
-- Pg
+- Mysql2
 
 # Dev libraries
 - Nodemon
 - Eslint (using airbnb style + personal preferences)
-- Jest
-- Faker
-- Factory Girl
-- Supertest
-- SQLite
-
-# Functionalities
-- Authentication (Login, Protected Routes, Unit and Integration Tests)

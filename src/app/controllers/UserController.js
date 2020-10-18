@@ -17,8 +17,6 @@ class UserController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
       } = request.body;
 
       const passwordHashed = await encryptPassword(password);
@@ -40,13 +38,10 @@ class UserController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
       });
 
       return response.status(201).json({ user, address });
     } catch (error) {
-      console.log(error);
       return response.status(401).json({ message: 'Error at User Register' });
     }
   }
@@ -64,21 +59,23 @@ class UserController {
 
       const passwordHashed = await encryptPassword(password);
 
-      const user = await User.update({
-        email,
-        cpf,
-        phone_ddd,
-        phone_number,
-        password: passwordHashed,
-      }, {
-        where: {
-          id: Number(id),
+      const user = await User.update(
+        {
+          email,
+          cpf,
+          phone_ddd,
+          phone_number,
+          password: passwordHashed,
         },
-      });
+        {
+          where: {
+            id: Number(id),
+          },
+        },
+      );
 
       return response.status(201).json(user);
     } catch (error) {
-      console.log(error);
       return response.status(401).json({ message: 'Error at User Update' });
     }
   }

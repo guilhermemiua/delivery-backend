@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     created_at: {
       type: DataTypes.DATE,
     },
@@ -21,6 +25,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
     },
   });
+
+  OrderProduct.associate = (models) => {
+    OrderProduct.belongsTo(models.Product, {
+      as: 'product',
+      foreignKey: 'product_id',
+      targetKey: 'id',
+    });
+    OrderProduct.belongsTo(models.Order, {
+      as: 'order',
+      foreignKey: 'order_id',
+      targetKey: 'id',
+    });
+  };
 
   return OrderProduct;
 };

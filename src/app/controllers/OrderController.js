@@ -1,14 +1,18 @@
-const { Order, OrderProduct, Company } = require('../models');
+const {
+  Address, Order, OrderProduct, User, Company, Product, sequelize,
+} = require('../models');
 
 class OrderController {
   async create(request, response) {
-    // TODO: adicionar transaction
+    const transaction = await sequelize.transaction();
+
     try {
       const {
         payment_type,
         is_delivery,
         products,
         company_id,
+        address_id,
       } = request.body;
 
       if (!Array.isArray(products) && products.length > 0) {
@@ -23,33 +27,52 @@ class OrderController {
 
       const totalPrice = products.reduce((acc, product) => {
         return acc + product.price;
-      });
+      }, 0);
+
+      const address = await Address.findByPk(address_id);
+
+      if (!company) {
+        return response.status(401).json({ message: 'Endereço não encontrado' });
+      }
 
       const order = await Order.create({
         payment_type,
-        is_delivery,
+        is_delivery: !!((is_delivery && company.has_delivery && company.delivery_price)),
         user_id: request.userId,
         company_id,
         total_price: totalPrice,
         status: 'waiting',
-        shipping_price: (is_delivery && company.delivery_price) ? company.delivery_price : 0,
-      });
+        street: address.street,
+        number: address.number,
+        district: address.district,
+        city: address.city,
+        state: address.state,
+        complement: address.complement,
+        zipcode: address.zipcode,
+        shipping_price: (is_delivery && company.has_delivery && company.delivery_price)
+          ? company.delivery_price
+          : 0,
+      }, { transaction });
 
       await Promise.all(products.map(async (product) => {
         await OrderProduct.create({
           product_id: product.id,
           order_id: order.id,
-        });
+          quatity: product.quantity,
+        }, { transaction });
       }));
+
+      await transaction.commit();
 
       return response.status(201).json(order);
     } catch (error) {
+      await transaction.rollback();
       console.log(error);
       return response.status(401).json({ message: 'Erro na criação do pedido' });
     }
   }
 
-  async update(request, response) {
+  async updateStatus(request, response) {
     try {
       const { id } = request.params;
       const {
@@ -66,7 +89,7 @@ class OrderController {
 
       return response.status(201).json(order);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na atualização do pedido' });
+      return response.status(401).json({ message: 'Erro na atualização do status pedido' });
     }
   }
 
@@ -79,6 +102,20 @@ class OrderController {
       }
 
       const orders = await Order.findAll({
+        include: [
+          {
+            model: OrderProduct,
+            as: 'order_products',
+            include: {
+              model: Product,
+              as: 'product',
+            },
+          },
+          {
+            model: User,
+            as: 'user',
+          },
+        ],
         where: {
           company_id: companyId,
         },
@@ -86,6 +123,7 @@ class OrderController {
 
       return response.status(200).json(orders);
     } catch (error) {
+      console.log(error);
       return response.status(401).json({ message: 'Erro na busca dos pedidos' });
     }
   }
