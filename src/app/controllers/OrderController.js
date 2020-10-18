@@ -2,6 +2,7 @@ const { Order, OrderProduct, Company } = require('../models');
 
 class OrderController {
   async create(request, response) {
+    // TODO: adicionar transaction
     try {
       const {
         payment_type,
@@ -31,7 +32,7 @@ class OrderController {
         company_id,
         total_price: totalPrice,
         status: 'waiting',
-        shipping_price: is_delivery ? company.delivery_price : null,
+        shipping_price: (is_delivery && company.delivery_price) ? company.delivery_price : 0,
       });
 
       await Promise.all(products.map(async (product) => {
@@ -43,7 +44,8 @@ class OrderController {
 
       return response.status(201).json(order);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na criação de uma ordem' });
+      console.log(error);
+      return response.status(401).json({ message: 'Erro na criação do pedido' });
     }
   }
 
@@ -64,7 +66,27 @@ class OrderController {
 
       return response.status(201).json(order);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na atualização da ordem' });
+      return response.status(401).json({ message: 'Erro na atualização do pedido' });
+    }
+  }
+
+  async getOrdersPerCompany(request, response) {
+    try {
+      const { companyId } = request;
+
+      if (!companyId) {
+        return response.status(401).json({ message: 'Empresa não enviado' });
+      }
+
+      const orders = await Order.findAll({
+        where: {
+          company_id: companyId,
+        },
+      });
+
+      return response.status(200).json(orders);
+    } catch (error) {
+      return response.status(401).json({ message: 'Erro na busca dos pedidos' });
     }
   }
 
@@ -74,7 +96,7 @@ class OrderController {
 
       return response.status(200).json(orders);
     } catch (error) {
-      return response.status(401).json({ message: 'Error na busca de ordems' });
+      return response.status(401).json({ message: 'Erro na busca de pedidos' });
     }
   }
 
@@ -85,12 +107,12 @@ class OrderController {
       const order = await Order.findByPk(Number(id));
 
       if (!order) {
-        return response.status(401).json({ message: 'Order not found' });
+        return response.status(401).json({ message: 'Pedido não encontrado' });
       }
 
       return response.status(200).json(order);
     } catch (error) {
-      return response.status(401).json({ message: 'Error na busca da ordem' });
+      return response.status(401).json({ message: 'Erro na busca do pedido' });
     }
   }
 }
