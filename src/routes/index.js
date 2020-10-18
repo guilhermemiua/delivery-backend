@@ -18,6 +18,12 @@ routes.post("/users/authenticate", UserController.authenticate);
 routes.post("/companies", CompanyController.create);
 routes.post("/companies/authenticate", CompanyController.authenticate);
 
+routes.get("/product-categories", ProductCategoryController.findAll);
+routes.get("/product-categories/:id", ProductCategoryController.findById);
+
+routes.get("/company-categories", CompanyCategoryController.findAll);
+routes.get("/company-categories/:id", CompanyCategoryController.findById);
+
 // Authenticated routes
 routes.use(authMiddleware);
 
@@ -28,8 +34,6 @@ routes.get("/companies/:id", CompanyController.findById);
 routes.put("/companies/:id", CompanyController.update);
 
 routes.post("/company-categories", CompanyCategoryController.create);
-routes.get("/company-categories", CompanyCategoryController.findAll);
-routes.get("/company-categories/:id", CompanyCategoryController.findById);
 routes.delete("/company-categories/:id", CompanyCategoryController.delete);
 
 routes.post("/products", ProductController.create);
@@ -39,8 +43,6 @@ routes.put("/products/:id", ProductController.update);
 routes.delete("/products/:id", ProductController.delete);
 
 routes.post("/product-categories", ProductCategoryController.create);
-routes.get("/product-categories", ProductCategoryController.findAll);
-routes.get("/product-categories/:id", ProductCategoryController.findById);
 routes.delete("/product-categories/:id", ProductCategoryController.delete);
 
 routes.post("/products", ProductController.create);
