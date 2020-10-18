@@ -17,8 +17,6 @@ module.exports = {
       state: 'PR',
       complement: '',
       zipcode: '08739490',
-      latitude: '1',
-      longitude: '1',
       is_admin: true,
       has_delivery: false,
       created_at: new Date(),

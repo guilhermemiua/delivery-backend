@@ -20,8 +20,13 @@ routes.post('/users/authenticate', UserController.authenticate);
 routes.post('/companies', CompanyController.create);
 routes.post('/companies/authenticate', CompanyController.authenticate);
 
+routes.get('/company-categories', CompanyCategoryController.findAll);
+
 // Authenticated routes
 routes.use(authMiddleware);
+
+routes.get('/me/products', ProductController.getProductsPerCompany);
+routes.get('/me/orders', OrderController.getOrdersPerCompany);
 
 routes.put('/user/:id', UserController.update);
 
@@ -30,7 +35,6 @@ routes.get('/companies/:id', CompanyController.findById);
 routes.put('/companies/:id', CompanyController.update);
 
 routes.post('/company-categories', CompanyCategoryController.create);
-routes.get('/company-categories', CompanyCategoryController.findAll);
 routes.get('/company-categories/:id', CompanyCategoryController.findById);
 routes.delete('/company-categories/:id', CompanyCategoryController.delete);
 
@@ -47,10 +51,14 @@ routes.delete('/product-categories/:id', ProductCategoryController.delete);
 
 routes.post('/products', ProductController.create);
 routes.get('/products', ProductController.findAll);
-routes.get('/products/me', ProductController.getProductsPerCompany);
 routes.get('/products/:id', ProductController.findById);
 routes.put('/products/:id', ProductController.update);
 routes.delete('/products/:id', ProductController.delete);
+
+routes.post('/orders', OrderController.create);
+routes.get('/orders', OrderController.findAll);
+routes.get('/orders/:id', OrderController.findById);
+routes.put('/orders/:id/status', OrderController.updateStatus);
 
 routes.post(
   '/upload/company',
@@ -69,11 +77,5 @@ routes.post(
   upload.single('image'),
   ImageUploadController.uploadProductImage,
 );
-
-routes.post('/orders', OrderController.create);
-routes.get('/orders', OrderController.findAll);
-routes.get('/orders/me', OrderController.getOrdersPerCompany);
-routes.get('/orders/:id', OrderController.findById);
-routes.put('/orders/:id', OrderController.update);
 
 module.exports = routes;

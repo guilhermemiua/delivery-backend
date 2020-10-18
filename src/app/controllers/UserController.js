@@ -17,8 +17,6 @@ class UserController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
       } = request.body;
 
       const passwordHashed = await encryptPassword(password);
@@ -40,8 +38,6 @@ class UserController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
       });
 
       return response.status(201).json({ user, address });
@@ -54,7 +50,11 @@ class UserController {
     try {
       const { id } = request.params;
       const {
-        email, cpf, phone_ddd, phone_number, password,
+        email,
+        cpf,
+        phone_ddd,
+        phone_number,
+        password,
       } = request.body;
 
       const passwordHashed = await encryptPassword(password);

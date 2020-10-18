@@ -34,6 +34,34 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
+    street: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    number: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    district: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    complement: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    zipcode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     status: {
       type: DataTypes.ENUM('waiting', 'confirmed', 'cancelled'),
       allowNull: false,
@@ -62,8 +90,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'order_review_id',
       targetKey: 'id',
     });
-    Order.belongsToMany(models.Product, {
-      through: models.OrderProduct,
+    Order.hasMany(models.OrderProduct, {
+      as: 'order_products',
+      foreignKey: 'order_id',
+      targetKey: 'id',
     });
   };
 

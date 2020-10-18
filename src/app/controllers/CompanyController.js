@@ -1,7 +1,3 @@
-const fs = require('fs');
-
-const { v4: uuidv4 } = require('uuid');
-
 const { Company, CompanyCategory, Product } = require('../models');
 const { encryptPassword } = require('../helpers');
 
@@ -22,13 +18,10 @@ class CompanyController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
         delivery_price,
         has_delivery,
         company_category_id,
         password,
-        profile_image,
       } = request.body;
 
       const passwordHashed = await encryptPassword(password);
@@ -47,29 +40,16 @@ class CompanyController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
         delivery_price,
         has_delivery,
         company_category_id,
         password: passwordHashed,
       });
 
-      if (profile_image) {
-        let refactorBase64 = profile_image.path.replace(/^data:image\/\w+;base64,/, '');
-        refactorBase64 = refactorBase64.replace(/^data:application\/\pdf+;base64,/, '');
-
-        const imageBuffer = Buffer.from(refactorBase64, 'base64');
-        const ext = profile_image.name.split('.').pop();
-        const fileName = `${uuidv4()}.${ext}`;
-
-        fs.writeFileSync(`./tmp/${fileName}`, imageBuffer, 'utf8');
-      }
-
       return response.status(201).json(company);
     } catch (error) {
       console.log(error);
-      return response.status(401).json({ message: 'Error at Company Register' });
+      return response.status(401).json({ message: 'Erro no cadastro da Empresa' });
     }
   }
 
@@ -79,8 +59,6 @@ class CompanyController {
       const {
         trading_name,
         company_name,
-        email,
-        password,
         cnpj,
         phone_ddd,
         phone_number,
@@ -91,19 +69,14 @@ class CompanyController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
         delivery_price,
         has_delivery,
         company_category_id,
       } = request.body;
 
-      const passwordHashed = await encryptPassword(password);
-
       const company = await Company.update({
         trading_name,
         company_name,
-        email,
         cnpj,
         phone_ddd,
         phone_number,
@@ -114,12 +87,9 @@ class CompanyController {
         state,
         complement,
         zipcode,
-        latitude,
-        longitude,
         delivery_price,
         has_delivery,
         company_category_id,
-        password: passwordHashed,
       }, {
         where: {
           id: Number(id),
@@ -129,7 +99,7 @@ class CompanyController {
       return response.status(201).json(company);
     } catch (error) {
       console.log(error);
-      return response.status(401).json({ message: 'Error at Company Update' });
+      return response.status(401).json({ message: 'Erro na atualização da Empresa' });
     }
   }
 

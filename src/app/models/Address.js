@@ -38,14 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    latitude: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    longitude: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     created_at: {
       type: DataTypes.DATE,
     },

@@ -73,14 +73,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    latitude: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    longitude: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     is_online: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
