@@ -39,14 +39,6 @@ module.exports = (sequelize, DataTypes) => {
     updated_at: {
       type: DataTypes.DATE,
     },
-  }, {
-    hooks: {
-      beforeSave: async (user) => {
-        if (user.password) {
-          user.password = await bcrypt.hash(user.password, 8);
-        }
-      },
-    },
   });
 
   User.prototype.checkPassword = function (password) {
