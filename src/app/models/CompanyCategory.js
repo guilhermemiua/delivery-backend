@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const CompanyCategory = sequelize.define('CompanyCategory', {
+  const CompanyCategory = sequelize.define("CompanyCategory", {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
 
   CompanyCategory.associate = (models) => {
     CompanyCategory.hasOne(models.Company, {
-      as: 'company',
-      foreignKey: 'company_category_id',
-      targetKey: 'id',
+      as: "company",
+      foreignKey: "company_category_id",
+      targetKey: "id",
     });
   };
 

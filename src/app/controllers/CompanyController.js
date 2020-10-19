@@ -1,5 +1,10 @@
-const { Company, CompanyCategory, Product } = require('../models');
-const { encryptPassword } = require('../helpers');
+const {
+  Company,
+  CompanyCategory,
+  Product,
+  ProfileImage,
+} = require("../models");
+const { encryptPassword } = require("../helpers");
 
 class CompanyController {
   async create(request, response) {
@@ -49,7 +54,9 @@ class CompanyController {
       return response.status(201).json(company);
     } catch (error) {
       console.log(error);
-      return response.status(401).json({ message: 'Erro no cadastro da Empresa' });
+      return response
+        .status(401)
+        .json({ message: "Erro no cadastro da Empresa" });
     }
   }
 
@@ -74,32 +81,37 @@ class CompanyController {
         company_category_id,
       } = request.body;
 
-      const company = await Company.update({
-        trading_name,
-        company_name,
-        cnpj,
-        phone_ddd,
-        phone_number,
-        street,
-        number,
-        district,
-        city,
-        state,
-        complement,
-        zipcode,
-        delivery_price,
-        has_delivery,
-        company_category_id,
-      }, {
-        where: {
-          id: Number(id),
+      const company = await Company.update(
+        {
+          trading_name,
+          company_name,
+          cnpj,
+          phone_ddd,
+          phone_number,
+          street,
+          number,
+          district,
+          city,
+          state,
+          complement,
+          zipcode,
+          delivery_price,
+          has_delivery,
+          company_category_id,
         },
-      });
+        {
+          where: {
+            id: Number(id),
+          },
+        }
+      );
 
       return response.status(201).json(company);
     } catch (error) {
       console.log(error);
-      return response.status(401).json({ message: 'Erro na atualização da Empresa' });
+      return response
+        .status(401)
+        .json({ message: "Erro na atualização da Empresa" });
     }
   }
 
@@ -110,17 +122,25 @@ class CompanyController {
       const company = await Company.findOne({ where: { email } });
 
       if (!company) {
-        return response.status(401).json({ message: 'Senha ou Email incorreto' });
+        return response
+          .status(401)
+          .json({ message: "Senha ou Email incorreto" });
       }
 
       if (!(await company.checkPassword(password))) {
-        return response.status(401).json({ message: 'Senha ou Email incorreto' });
+        return response
+          .status(401)
+          .json({ message: "Senha ou Email incorreto" });
       }
 
-      return response.status(200).json({ company, token: company.generateToken() });
+      return response
+        .status(200)
+        .json({ company, token: company.generateToken() });
     } catch (error) {
       console.log(error);
-      return response.status(401).json({ message: 'Erro na autenticação da empresa' });
+      return response
+        .status(401)
+        .json({ message: "Erro na autenticação da empresa" });
     }
   }
 
@@ -140,11 +160,15 @@ class CompanyController {
           include: [
             {
               model: CompanyCategory,
-              as: 'company_category',
+              as: "company_category",
             },
             {
               model: Product,
-              as: 'products',
+              as: "products",
+            },
+            {
+              model: ProfileImage,
+              as: "profile_image",
             },
           ],
         });
@@ -156,11 +180,11 @@ class CompanyController {
           include: [
             {
               model: CompanyCategory,
-              as: 'company_category',
+              as: "company_category",
             },
             {
               model: Product,
-              as: 'products',
+              as: "products",
             },
           ],
         });
@@ -168,7 +192,9 @@ class CompanyController {
 
       return response.status(200).json(companies);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Find All' });
+      return response
+        .status(401)
+        .json({ message: "Error at Company Find All" });
     }
   }
 
@@ -177,25 +203,35 @@ class CompanyController {
       const { id } = request.params;
 
       const company = await Company.findByPk(Number(id), {
+        subQuery: false,
+        underscored: true,
         include: [
           {
             model: CompanyCategory,
-            as: 'company_category',
+            as: "company_category",
           },
           {
             model: Product,
-            as: 'products',
+            as: "products",
+          },
+          {
+            attributes: ["path"],
+            model: ProfileImage,
+            as: "profileImages",
           },
         ],
       });
 
       if (!company) {
-        return response.status(401).json({ message: 'Company not found' });
+        return response.status(401).json({ message: "Company not found" });
       }
 
       return response.status(200).json(company);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Company Find By Id' });
+      console.log(error);
+      return response
+        .status(401)
+        .json({ message: "Error at Company Find By Id" });
     }
   }
 }
