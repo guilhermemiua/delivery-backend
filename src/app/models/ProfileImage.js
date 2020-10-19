@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const ProfileImage = sequelize.define('ProfileImage', {
+  const ProfileImage = sequelize.define("ProfileImage", {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -23,15 +23,13 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   ProfileImage.associate = (models) => {
-    ProfileImage.belongsTo(models.Company, {
-      as: 'company',
-      foreignKey: 'profile_image_id',
-      targetKey: 'id',
+    ProfileImage.hasOne(models.Company, {
+      as: "company",
     });
-    ProfileImage.belongsTo(models.User, {
-      as: 'user',
-      foreignKey: 'profile_image_id',
-      targetKey: 'id',
+    ProfileImage.hasOne(models.User, {
+      as: "user",
+      foreignKey: "profile_image_id",
+      targetKey: "id",
     });
   };
 

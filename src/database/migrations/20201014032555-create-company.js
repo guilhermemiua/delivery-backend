@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('companies', {
+    return queryInterface.createTable("companies", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -10,6 +10,10 @@ module.exports = {
       trading_name: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      company_id: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       company_name: {
         type: Sequelize.STRING,
@@ -103,6 +107,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('companies');
+    return queryInterface.dropTable("companies");
   },
 };
