@@ -58,7 +58,8 @@ class ImageUploadController {
           process.cwd(),
           `./public/uploads/${id}${path.extname(request.file.originalname)}`
         ),
-        request.file.originalName
+        request.file.originalname,
+        id
       );
 
       if (file) {
@@ -97,7 +98,8 @@ class ImageUploadController {
           process.cwd(),
           `./public/uploads/${id}${path.extname(request.file.originalname)}`
         ),
-        request.file.originalName
+        request.file.originalname,
+        id
       );
 
       if (file) {
