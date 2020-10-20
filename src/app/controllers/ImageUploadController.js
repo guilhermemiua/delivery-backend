@@ -1,13 +1,13 @@
-const shortid = require('shortid');
-const path = require('path');
+const shortid = require("shortid");
+const path = require("path");
 const {
   Company,
   User,
   Product,
   ProductImage,
   ProfileImage,
-} = require('../models');
-const { saveImage } = require('../helpers');
+} = require("../models");
+const { saveImage } = require("../helpers");
 
 class ImageUploadController {
   async uploadCompanyImage(request, response) {
@@ -17,10 +17,10 @@ class ImageUploadController {
         request.file.path,
         path.join(
           process.cwd(),
-          `public/uploads/${id}${path.extname(request.file.originalname)}`,
+          `public/uploads/${id}${path.extname(request.file.originalname)}`
         ),
         request.file.originalname,
-        id,
+        id
       );
 
       if (file) {
@@ -37,7 +37,7 @@ class ImageUploadController {
             where: {
               id: Number(request.companyId),
             },
-          },
+          }
         );
 
         return response.status(200).json(profileImage);
@@ -56,9 +56,9 @@ class ImageUploadController {
         request.file.path,
         path.join(
           process.cwd(),
-          `./public/uploads/${id}${path.extname(request.file.originalname)}`,
+          `./public/uploads/${id}${path.extname(request.file.originalname)}`
         ),
-        request.file.originalName,
+        request.file.originalName
       );
 
       if (file) {
@@ -75,7 +75,7 @@ class ImageUploadController {
             where: {
               id: Number(request.userId),
             },
-          },
+          }
         );
 
         return response.status(200).json(profileImage);
@@ -95,9 +95,9 @@ class ImageUploadController {
         request.file.path,
         path.join(
           process.cwd(),
-          `./public/uploads/${id}${path.extname(request.file.originalname)}`,
+          `./public/uploads/${id}${path.extname(request.file.originalname)}`
         ),
-        request.file.originalName,
+        request.file.originalName
       );
 
       if (file) {
@@ -114,7 +114,7 @@ class ImageUploadController {
             where: {
               id: Number(productId),
             },
-          },
+          }
         );
 
         return response.status(200).json(productImage);
@@ -122,6 +122,7 @@ class ImageUploadController {
 
       return response.status(400);
     } catch (err) {
+      console.log(err);
       return response.status(400).json(err);
     }
   }
