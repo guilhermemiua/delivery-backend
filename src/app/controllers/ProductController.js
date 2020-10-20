@@ -1,17 +1,13 @@
-const { Product } = require('../models');
+const { Product, ProductImage } = require("../models");
 
 class ProductController {
   async create(request, response) {
     try {
       const { companyId } = request;
-      const {
-        name,
-        price,
-        product_category_id,
-      } = request.body;
+      const { name, price, product_category_id } = request.body;
 
       if (!companyId) {
-        return response.status(401).json({ message: 'Empresa não enviado' });
+        return response.status(401).json({ message: "Empresa não enviado" });
       }
 
       const product = await Product.create({
@@ -23,42 +19,55 @@ class ProductController {
 
       return response.status(201).json(product);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na criação do produto' });
+      console.log(error);
+      return response
+        .status(401)
+        .json({ message: "Erro na criação do produto" });
     }
   }
 
   async update(request, response) {
     try {
       const { id } = request.params;
-      const {
-        name,
-        price,
-        product_category_id,
-      } = request.body;
+      const { name, price, product_category_id } = request.body;
 
-      const product = await Product.update({
-        name,
-        price,
-        product_category_id,
-      }, {
-        where: {
-          id: Number(id),
+      const product = await Product.update(
+        {
+          name,
+          price,
+          product_category_id,
         },
-      });
+        {
+          where: {
+            id: Number(id),
+          },
+        }
+      );
 
       return response.status(201).json(product);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Update' });
+      return response.status(401).json({ message: "Error at Product Update" });
     }
   }
 
   async findAll(request, response) {
     try {
-      const products = await Product.findAll();
+      const products = await Product.findAll({
+        include: [
+          {
+            attributes: ["path"],
+            model: ProductImage,
+            as: "productImages",
+          },
+        ],
+      });
 
       return response.status(200).json(products);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Find All' });
+      console.log(error);
+      return response
+        .status(401)
+        .json({ message: "Error at Product Find All" });
     }
   }
 
@@ -67,18 +76,28 @@ class ProductController {
       const { companyId } = request;
 
       if (!companyId) {
-        return response.status(401).json({ message: 'Empresa não enviado' });
+        return response.status(401).json({ message: "Empresa não enviado" });
       }
 
       const products = await Product.findAll({
         where: {
           company_id: companyId,
         },
+        include: [
+          {
+            attributes: ["path"],
+            model: ProductImage,
+            as: "productImages",
+          },
+        ],
       });
 
       return response.status(200).json(products);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na busca dos produtos' });
+      console.log(error);
+      return response
+        .status(401)
+        .json({ message: "Erro na busca dos produtos" });
     }
   }
 
@@ -86,15 +105,26 @@ class ProductController {
     try {
       const { id } = request.params;
 
-      const product = await Product.findByPk(Number(id));
+      const product = await Product.findByPk(Number(id), {
+        include: [
+          {
+            attributes: ["path"],
+            model: ProductImage,
+            as: "productImages",
+          },
+        ],
+      });
 
       if (!product) {
-        return response.status(401).json({ message: 'Product not found' });
+        return response.status(401).json({ message: "Product not found" });
       }
 
       return response.status(200).json(product);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Find By Id' });
+      console.log(error);
+      return response
+        .status(401)
+        .json({ message: "Error at Product Find By Id" });
     }
   }
 
@@ -109,10 +139,10 @@ class ProductController {
       });
 
       return response.status(200).json({
-        message: 'Deleted',
+        message: "Deleted",
       });
     } catch (error) {
-      return response.status(401).json({ message: 'Error at Product Delete' });
+      return response.status(401).json({ message: "Error at Product Delete" });
     }
   }
 }

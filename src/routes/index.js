@@ -40,6 +40,12 @@ routes.get("/companies", CompanyController.findAll);
 routes.get("/companies/:id", CompanyController.findById);
 routes.put("/companies/:id", CompanyController.update);
 
+routes.post("/products", ProductController.create);
+routes.get("/products", ProductController.findAll);
+routes.get("/products/:id", ProductController.findById);
+routes.put("/products/:id", ProductController.update);
+routes.delete("/products/:id", ProductController.delete);
+
 routes.post("/company-categories", CompanyCategoryController.create);
 routes.get("/company-categories/:id", CompanyCategoryController.findById);
 routes.delete("/company-categories/:id", CompanyCategoryController.delete);
