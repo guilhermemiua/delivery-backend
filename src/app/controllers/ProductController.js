@@ -1,4 +1,4 @@
-const { Product, ProductImage } = require("../models");
+const { Product, ProductImage, ProductCategory } = require("../models");
 
 class ProductController {
   async create(request, response) {
@@ -60,6 +60,10 @@ class ProductController {
           ...(params || {}),
         },
         include: [
+          {
+            model: ProductCategory,
+            as: "product_category",
+          },
           {
             attributes: ["path"],
             model: ProductImage,
