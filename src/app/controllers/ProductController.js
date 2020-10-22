@@ -1,4 +1,4 @@
-const { Product, ProductImage } = require('../models');
+const { Product, ProductImage } = require("../models");
 
 class ProductController {
   async create(request, response) {
@@ -7,7 +7,7 @@ class ProductController {
       const { name, price, product_category_id } = request.body;
 
       if (!companyId) {
-        return response.status(401).json({ message: 'Empresa não enviado' });
+        return response.status(401).json({ message: "Empresa não enviado" });
       }
 
       const product = await Product.create({
@@ -22,7 +22,7 @@ class ProductController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Erro na criação do produto' });
+        .json({ message: "Erro na criação do produto" });
     }
   }
 
@@ -41,23 +41,29 @@ class ProductController {
           where: {
             id: Number(id),
           },
-        },
+        }
       );
 
       return response.status(201).json(product);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na atualização do Produto' });
+      return response
+        .status(401)
+        .json({ message: "Erro na atualização do Produto" });
     }
   }
 
   async findAll(request, response) {
+    const params = request.params;
     try {
       const products = await Product.findAll({
+        where: {
+          ...(params || {}),
+        },
         include: [
           {
-            attributes: ['path'],
+            attributes: ["path"],
             model: ProductImage,
-            as: 'productImages',
+            as: "productImages",
           },
         ],
       });
@@ -67,7 +73,7 @@ class ProductController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Error at Product Find All' });
+        .json({ message: "Error at Product Find All" });
     }
   }
 
@@ -76,7 +82,7 @@ class ProductController {
       const { companyId } = request;
 
       if (!companyId) {
-        return response.status(401).json({ message: 'Empresa não enviado' });
+        return response.status(401).json({ message: "Empresa não enviado" });
       }
 
       const products = await Product.findAll({
@@ -85,9 +91,9 @@ class ProductController {
         },
         include: [
           {
-            attributes: ['path'],
+            attributes: ["path"],
             model: ProductImage,
-            as: 'productImages',
+            as: "productImages",
           },
         ],
       });
@@ -97,7 +103,7 @@ class ProductController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Erro na busca dos produtos' });
+        .json({ message: "Erro na busca dos produtos" });
     }
   }
 
@@ -108,23 +114,21 @@ class ProductController {
       const product = await Product.findByPk(Number(id), {
         include: [
           {
-            attributes: ['path'],
+            attributes: ["path"],
             model: ProductImage,
-            as: 'productImages',
+            as: "productImages",
           },
         ],
       });
 
       if (!product) {
-        return response.status(401).json({ message: 'Produto não encontrado' });
+        return response.status(401).json({ message: "Produto não encontrado" });
       }
 
       return response.status(200).json(product);
     } catch (error) {
       console.log(error);
-      return response
-        .status(401)
-        .json({ message: 'Erro na busca do produto' });
+      return response.status(401).json({ message: "Erro na busca do produto" });
     }
   }
 
@@ -139,10 +143,12 @@ class ProductController {
       });
 
       return response.status(200).json({
-        message: 'Deleted',
+        message: "Deleted",
       });
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na remoção do produto' });
+      return response
+        .status(401)
+        .json({ message: "Erro na remoção do produto" });
     }
   }
 }
