@@ -7,7 +7,7 @@ const {
   Product,
   sequelize,
   ProductImage,
-} = require('../models');
+} = require("../models");
 
 class OrderController {
   async create(request, response) {
@@ -22,16 +22,16 @@ class OrderController {
         address_id,
       } = request.body;
 
-      if (!Array.isArray(products) && products.length > 0) {
+      if (!Array.isArray(products) && !products.length) {
         return response
           .status(401)
-          .json({ message: 'Nenhum produto enviado na ordem' });
+          .json({ message: "Nenhum produto enviado na ordem" });
       }
 
       const company = await Company.findByPk(company_id);
 
       if (!company) {
-        return response.status(401).json({ message: 'Empresa não encontrada' });
+        return response.status(401).json({ message: "Empresa não encontrada" });
       }
 
       const totalPrice = products.reduce((acc, product) => {
@@ -43,21 +43,21 @@ class OrderController {
       if (!company) {
         return response
           .status(401)
-          .json({ message: 'Endereço não encontrado' });
+          .json({ message: "Endereço não encontrado" });
       }
 
       const order = await Order.create(
         {
           payment_type,
           is_delivery: !!(
-            is_delivery
-            && company.has_delivery
-            && company.delivery_price
+            is_delivery &&
+            company.has_delivery &&
+            company.delivery_price
           ),
           user_id: request.userId,
           company_id,
           total_price: totalPrice,
-          status: 'waiting',
+          status: "waiting",
           street: address.street,
           number: address.number,
           district: address.district,
@@ -70,7 +70,7 @@ class OrderController {
               ? company.delivery_price
               : 0,
         },
-        { transaction },
+        { transaction }
       );
 
       await Promise.all(
@@ -81,9 +81,9 @@ class OrderController {
               order_id: order.id,
               quantity: product.quantity,
             },
-            { transaction },
+            { transaction }
           );
-        }),
+        })
       );
 
       await transaction.commit();
@@ -94,7 +94,7 @@ class OrderController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Erro na criação do pedido' });
+        .json({ message: "Erro na criação do pedido" });
     }
   }
 
@@ -111,14 +111,14 @@ class OrderController {
           where: {
             id: Number(id),
           },
-        },
+        }
       );
 
       return response.status(201).json(order);
     } catch (error) {
       return response
         .status(401)
-        .json({ message: 'Erro na atualização do status pedido' });
+        .json({ message: "Erro na atualização do status pedido" });
     }
   }
 
@@ -127,29 +127,29 @@ class OrderController {
       const { companyId } = request;
 
       if (!companyId) {
-        return response.status(401).json({ message: 'Empresa não enviado' });
+        return response.status(401).json({ message: "Empresa não enviado" });
       }
 
       const orders = await Order.findAll({
-        order: [['id', 'DESC']],
+        order: [["id", "DESC"]],
         include: [
           {
             model: OrderProduct,
-            as: 'order_products',
+            as: "order_products",
             include: {
               model: Product,
-              as: 'product',
+              as: "product",
               include: [
                 {
                   model: ProductImage,
-                  as: 'productImages',
+                  as: "productImages",
                 },
               ],
             },
           },
           {
             model: User,
-            as: 'user',
+            as: "user",
           },
         ],
         where: {
@@ -162,7 +162,7 @@ class OrderController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Erro na busca dos pedidos' });
+        .json({ message: "Erro na busca dos pedidos" });
     }
   }
 
@@ -172,7 +172,7 @@ class OrderController {
 
       return response.status(200).json(orders);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na busca de pedidos' });
+      return response.status(401).json({ message: "Erro na busca de pedidos" });
     }
   }
 
@@ -183,12 +183,12 @@ class OrderController {
       const order = await Order.findByPk(Number(id));
 
       if (!order) {
-        return response.status(401).json({ message: 'Pedido não encontrado' });
+        return response.status(401).json({ message: "Pedido não encontrado" });
       }
 
       return response.status(200).json(order);
     } catch (error) {
-      return response.status(401).json({ message: 'Erro na busca do pedido' });
+      return response.status(401).json({ message: "Erro na busca do pedido" });
     }
   }
 }
