@@ -53,7 +53,7 @@ class ProductController {
   }
 
   async findAll(request, response) {
-    const params = request.params;
+    const params = request.query;
     try {
       const products = await Product.findAll({
         where: {
