@@ -131,6 +131,7 @@ class OrderController {
       }
 
       const orders = await Order.findAll({
+        order: [['id', 'DESC']],
         include: [
           {
             model: OrderProduct,

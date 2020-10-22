@@ -42,7 +42,7 @@ class UserController {
 
       return response.status(201).json({ user, address });
     } catch (error) {
-      return response.status(401).json({ message: 'Error at User Register' });
+      return response.status(401).json({ message: 'Erro no cadastro de Usuário' });
     }
   }
 
@@ -76,7 +76,7 @@ class UserController {
 
       return response.status(201).json(user);
     } catch (error) {
-      return response.status(401).json({ message: 'Error at User Update' });
+      return response.status(401).json({ message: 'Erro na atualização do usuário' });
     }
   }
 
@@ -88,18 +88,18 @@ class UserController {
 
       // User not found
       if (!user) {
-        return response.status(401).json({ message: 'User not found' });
+        return response.status(401).json({ message: 'Usuário não encontrado' });
       }
 
       // Incorrect password
       if (!(await user.checkPassword(password))) {
-        return response.status(401).json({ message: 'Incorrect password' });
+        return response.status(401).json({ message: 'Senha ou email incorreto' });
       }
 
       return response.status(200).json({ user, token: user.generateToken() });
     } catch (error) {
       console.log(error);
-      return response.status(401).json({ message: 'Error at User Authentication' });
+      return response.status(401).json({ message: 'Erro na autenticação do usuário' });
     }
   }
 }

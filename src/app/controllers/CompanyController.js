@@ -222,7 +222,7 @@ class CompanyController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Error at Company Find All' });
+        .json({ message: 'Erro na busca de empresas' });
     }
   }
 
@@ -251,7 +251,7 @@ class CompanyController {
       });
 
       if (!company) {
-        return response.status(401).json({ message: 'Company not found' });
+        return response.status(401).json({ message: 'Empresa não encontrada' });
       }
 
       return response.status(200).json(company);
@@ -259,7 +259,7 @@ class CompanyController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: 'Error at Company Find By Id' });
+        .json({ message: 'Erro na busca da empresa' });
     }
   }
 }
