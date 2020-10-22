@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define("Product", {
+  const Product = sequelize.define('Product', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -37,24 +37,24 @@ module.exports = (sequelize, DataTypes) => {
 
   Product.associate = (models) => {
     Product.belongsTo(models.Company, {
-      as: "company",
-      foreignKey: "company_id",
-      targetKey: "id",
+      as: 'company',
+      foreignKey: 'company_id',
+      targetKey: 'id',
     });
     Product.belongsTo(models.ProductCategory, {
-      as: "product_category",
-      foreignKey: "product_category_id",
-      targetKey: "id",
+      as: 'product_category',
+      foreignKey: 'product_category_id',
+      targetKey: 'id',
     });
     Product.belongsTo(models.ProductImage, {
-      as: "productImages",
-      foreignKey: "product_image_id",
-      targetKey: "id",
+      as: 'productImages',
+      foreignKey: 'product_image_id',
+      targetKey: 'id',
     });
     Product.hasMany(models.OrderProduct, {
-      as: "order_products",
-      foreignKey: "product_id",
-      targetKey: "id",
+      as: 'order_products',
+      foreignKey: 'product_id',
+      targetKey: 'id',
     });
   };
 

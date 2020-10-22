@@ -1,8 +1,8 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 module.exports = (sequelize, DataTypes) => {
-  const Company = sequelize.define("Company", {
+  const Company = sequelize.define('Company', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -109,24 +109,24 @@ module.exports = (sequelize, DataTypes) => {
 
   Company.associate = (models) => {
     Company.belongsTo(models.CompanyCategory, {
-      as: "company_category",
-      foreignKey: "company_category_id",
-      targetKey: "id",
+      as: 'company_category',
+      foreignKey: 'company_category_id',
+      targetKey: 'id',
     });
     Company.hasMany(models.Product, {
-      as: "products",
-      foreignKey: "company_id",
-      targetKey: "id",
+      as: 'products',
+      foreignKey: 'company_id',
+      targetKey: 'id',
     });
     Company.hasMany(models.Order, {
-      as: "orders",
-      foreignKey: "company_id",
-      targetKey: "id",
+      as: 'orders',
+      foreignKey: 'company_id',
+      targetKey: 'id',
     });
     Company.belongsTo(models.ProfileImage, {
-      as: "profileImages",
-      foreignKey: "profile_image_id",
-      targetKey: "id",
+      as: 'profileImages',
+      foreignKey: 'profile_image_id',
+      targetKey: 'id',
     });
   };
 

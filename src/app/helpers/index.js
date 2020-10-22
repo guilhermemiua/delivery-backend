@@ -1,7 +1,9 @@
-const bcrypt = require("bcryptjs");
-const path = require("path");
+const bcrypt = require('bcryptjs');
+const path = require('path');
 
-const fs = require("fs");
+const fs = require('fs');
+
+require('dotenv').config();
 
 function encryptPassword(password) {
   return bcrypt.hash(password, 8);
@@ -22,12 +24,12 @@ async function saveImage(tempPath, targetPath, originalName, newName) {
 
         return resolve(
           `${process.env.APP_HOST}/uploads/${newName}${path.extname(
-            originalName
-          )}`
+            originalName,
+          )}`,
         );
       });
     } else {
-      return reject(new Error("Only jpg, png and gif allowed"));
+      return reject(new Error('Only jpg, png and gif allowed'));
     }
   });
 }

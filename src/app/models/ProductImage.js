@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const ProductImage = sequelize.define("ProductImage", {
+  const ProductImage = sequelize.define('ProductImage', {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
@@ -24,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
 
   ProductImage.associate = (models) => {
     ProductImage.hasOne(models.Product, {
-      as: "product",
-      foreignKey: "product_image_id",
-      targetKey: "id",
+      as: 'productImages',
+      foreignKey: 'product_image_id',
+      targetKey: 'id',
     });
   };
 

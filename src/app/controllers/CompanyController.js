@@ -3,8 +3,8 @@ const {
   CompanyCategory,
   Product,
   ProfileImage,
-} = require("../models");
-const { encryptPassword } = require("../helpers");
+} = require('../models');
+const { encryptPassword } = require('../helpers');
 
 class CompanyController {
   async create(request, response) {
@@ -56,7 +56,7 @@ class CompanyController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: "Erro no cadastro da Empresa" });
+        .json({ message: 'Erro no cadastro da Empresa' });
     }
   }
 
@@ -103,7 +103,7 @@ class CompanyController {
           where: {
             id: Number(id),
           },
-        }
+        },
       );
 
       return response.status(201).json(company);
@@ -111,7 +111,7 @@ class CompanyController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: "Erro na atualização da Empresa" });
+        .json({ message: 'Erro na atualização da Empresa' });
     }
   }
 
@@ -119,18 +119,37 @@ class CompanyController {
     try {
       const { email, password } = request.body;
 
-      const company = await Company.findOne({ where: { email } });
+      const company = await Company.findOne({
+        where: { email },
+        subQuery: false,
+        underscored: true,
+        include: [
+          {
+            model: CompanyCategory,
+            as: 'company_category',
+          },
+          {
+            model: Product,
+            as: 'products',
+          },
+          {
+            attributes: ['id', 'name', 'path'],
+            model: ProfileImage,
+            as: 'profileImages',
+          },
+        ],
+      });
 
       if (!company) {
         return response
           .status(401)
-          .json({ message: "Senha ou Email incorreto" });
+          .json({ message: 'Senha ou Email incorreto' });
       }
 
       if (!(await company.checkPassword(password))) {
         return response
           .status(401)
-          .json({ message: "Senha ou Email incorreto" });
+          .json({ message: 'Senha ou Email incorreto' });
       }
 
       return response
@@ -140,7 +159,7 @@ class CompanyController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: "Erro na autenticação da empresa" });
+        .json({ message: 'Erro na autenticação da empresa' });
     }
   }
 
@@ -160,15 +179,15 @@ class CompanyController {
           include: [
             {
               model: CompanyCategory,
-              as: "company_category",
+              as: 'company_category',
             },
             {
               model: Product,
-              as: "products",
+              as: 'products',
             },
             {
               model: ProfileImage,
-              as: "profile_image",
+              as: 'profile_image',
             },
           ],
         });
@@ -180,11 +199,11 @@ class CompanyController {
           include: [
             {
               model: CompanyCategory,
-              as: "company_category",
+              as: 'company_category',
             },
             {
               model: Product,
-              as: "products",
+              as: 'products',
             },
           ],
         });
@@ -192,9 +211,10 @@ class CompanyController {
 
       return response.status(200).json(companies);
     } catch (error) {
+      console.log(error);
       return response
         .status(401)
-        .json({ message: "Error at Company Find All" });
+        .json({ message: 'Error at Company Find All' });
     }
   }
 
@@ -208,22 +228,22 @@ class CompanyController {
         include: [
           {
             model: CompanyCategory,
-            as: "company_category",
+            as: 'company_category',
           },
           {
             model: Product,
-            as: "products",
+            as: 'products',
           },
           {
-            attributes: ["path"],
+            attributes: ['id', 'name', 'path'],
             model: ProfileImage,
-            as: "profileImages",
+            as: 'profileImages',
           },
         ],
       });
 
       if (!company) {
-        return response.status(401).json({ message: "Company not found" });
+        return response.status(401).json({ message: 'Company not found' });
       }
 
       return response.status(200).json(company);
@@ -231,7 +251,7 @@ class CompanyController {
       console.log(error);
       return response
         .status(401)
-        .json({ message: "Error at Company Find By Id" });
+        .json({ message: 'Error at Company Find By Id' });
     }
   }
 }
