@@ -165,7 +165,7 @@ class CompanyController {
 
   async findAll(request, response) {
     try {
-      const { offset, limit } = request.query;
+      const { offset, limit, ...params } = request.query;
 
       let companies;
 
@@ -173,6 +173,7 @@ class CompanyController {
         companies = await Company.findAndCountAll({
           where: {
             is_admin: 0,
+            ...(params || {}),
           },
           offset: Number(offset),
           limit: Number(limit),
@@ -186,8 +187,9 @@ class CompanyController {
               as: 'products',
             },
             {
+              attributes: ['path'],
               model: ProfileImage,
-              as: 'profile_image',
+              as: 'profileImages',
             },
           ],
         });
@@ -195,6 +197,7 @@ class CompanyController {
         companies = await Company.findAll({
           where: {
             is_admin: 0,
+            ...(params || {}),
           },
           include: [
             {
@@ -204,6 +207,11 @@ class CompanyController {
             {
               model: Product,
               as: 'products',
+            },
+            {
+              attributes: ['path'],
+              model: ProfileImage,
+              as: 'profileImages',
             },
           ],
         });
