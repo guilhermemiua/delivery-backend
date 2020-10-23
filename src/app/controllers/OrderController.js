@@ -35,7 +35,7 @@ class OrderController {
       }
 
       const totalPrice = products.reduce((acc, product) => {
-        return acc + product.price;
+        return acc + (product.price * product.quantity);
       }, 0);
 
       const address = await Address.findByPk(address_id);
@@ -168,10 +168,75 @@ class OrderController {
 
   async findAll(request, response) {
     try {
-      const orders = await Order.findAll();
+      const { type } = request.query;
+
+      let orders;
+
+      if (type === 'user') {
+        const { userId } = request;
+
+        orders = await Order.findAll({
+          order: [['id', 'DESC']],
+          include: [
+            {
+              model: OrderProduct,
+              as: 'order_products',
+              include: {
+                model: Product,
+                as: 'product',
+                include: [
+                  {
+                    model: ProductImage,
+                    as: 'productImages',
+                  },
+                ],
+              },
+            },
+            {
+              model: Company,
+              as: 'company',
+            },
+          ],
+          where: {
+            user_id: userId,
+          },
+        });
+      } else if (type === 'company') {
+        const { companyId } = request;
+
+        orders = await Order.findAll({
+          order: [['id', 'DESC']],
+          include: [
+            {
+              model: OrderProduct,
+              as: 'order_products',
+              include: {
+                model: Product,
+                as: 'product',
+                include: [
+                  {
+                    model: ProductImage,
+                    as: 'productImages',
+                  },
+                ],
+              },
+            },
+            {
+              model: User,
+              as: 'user',
+            },
+          ],
+          where: {
+            company_id: companyId,
+          },
+        });
+      } else {
+        orders = await Order.findAll({});
+      }
 
       return response.status(200).json(orders);
     } catch (error) {
+      console.log(error);
       return response.status(401).json({ message: 'Erro na busca de pedidos' });
     }
   }
