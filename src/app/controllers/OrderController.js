@@ -15,7 +15,7 @@ class OrderController {
         address_id,
       } = request.body;
 
-      if (!Array.isArray(products) && products.length > 0) {
+      if (!Array.isArray(products) && products.length === 0) {
         return response.status(401).json({ message: 'Nenhum produto enviado na ordem' });
       }
 
@@ -26,7 +26,7 @@ class OrderController {
       }
 
       const totalPrice = products.reduce((acc, product) => {
-        return acc + product.price;
+        return acc + product.price * product.quantity;
       }, 0);
 
       const address = await Address.findByPk(address_id);
