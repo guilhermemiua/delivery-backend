@@ -35,6 +35,7 @@ routes.get('/me/products', ProductController.getProductsPerCompany);
 routes.get('/me/orders', OrderController.getOrdersPerCompany);
 
 routes.put('/user/:id', UserController.update);
+routes.get('/users/:id', UserController.findById);
 
 routes.get('/companies', CompanyController.findAll);
 routes.get('/companies/:id', CompanyController.findById);

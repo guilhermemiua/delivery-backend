@@ -84,7 +84,17 @@ class UserController {
     try {
       const { email, password } = request.body;
 
-      const user = await User.findOne({ where: { email } });
+      const user = await User.findOne({
+        where: {
+          email,
+        },
+        include: [
+          {
+            model: Address,
+            as: 'addresses',
+          },
+        ],
+      });
 
       // User not found
       if (!user) {
@@ -100,6 +110,34 @@ class UserController {
     } catch (error) {
       console.log(error);
       return response.status(401).json({ message: 'Erro na autenticação do usuário' });
+    }
+  }
+
+  async findById(request, response) {
+    try {
+      const { id } = request.params;
+
+      const user = await User.findByPk(Number(id), {
+        subQuery: false,
+        underscored: true,
+        include: [
+          {
+            model: Address,
+            as: 'addresses',
+          },
+        ],
+      });
+
+      if (!user) {
+        return response.status(401).json({ message: 'Usuário não encontrado' });
+      }
+
+      return response.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      return response
+        .status(401)
+        .json({ message: 'Erro na busca do usuário' });
     }
   }
 }
