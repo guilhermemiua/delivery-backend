@@ -7,6 +7,7 @@ const {
   Product,
   sequelize,
   ProductImage,
+  ProfileImage,
 } = require('../models');
 
 class OrderController {
@@ -195,6 +196,13 @@ class OrderController {
             {
               model: Company,
               as: 'company',
+              include: [
+                {
+                  attributes: ['id', 'name', 'path'],
+                  model: ProfileImage,
+                  as: 'profileImages',
+                },
+              ],
             },
           ],
           where: {
