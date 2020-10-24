@@ -57,7 +57,9 @@ class OrderController {
           ),
           user_id: request.userId,
           company_id,
-          total_price: totalPrice,
+          total_price: is_delivery && company.has_delivery && company.delivery_price
+            ? totalPrice + Number(company.delivery_price)
+            : totalPrice,
           status: 'waiting',
           street: address.street,
           number: address.number,
